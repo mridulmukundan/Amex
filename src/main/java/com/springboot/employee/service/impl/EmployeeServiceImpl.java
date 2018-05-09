@@ -23,23 +23,36 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	EmployeeRepository empRepo;
 	
-	
+	/*
+	 * return all employess
+	 */
 	public List<Employee> getEmployees()
 	{
 		return empRepo.findAll();
 	}
 	
+	/*
+	 * return an employee By Id
+	 * throws ResourceNotFoundException if employee by given ID not present
+	 */
 	public Employee getEmployee(Long id)
 	{
 		return empRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
 		
 	}
 	
+	/*
+	 * create an employee
+	 */
 	public Employee createEmployee(Employee emp)
 	{
 		return empRepo.save(emp);
 	}
 	
+	/*
+	 * update employee by ID
+	 * throws ResourceNotFoundException if employee by given ID not present
+	 */
 	public Employee updateEmployee(Long id, Employee emp)
 	{
 		Optional<Employee> optEmployee = empRepo.findById(id);
@@ -57,6 +70,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return updatedEmp;
 	}
 	
+	/*
+	 * delete an employee By Id
+	 * throws ResourceNotFoundException if employee by given ID not present
+	 */
 	public Employee deleteEmployee(Long id)
 	{
 		/*Optional<Employee> optEmployee = empRepo.findById(id);

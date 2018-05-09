@@ -14,6 +14,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler{
 
+	/**
+	 * Handler method for Resource Not Found Exception
+	 * @param ResourceNotFoundException ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
 	protected ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex) {
 
@@ -24,6 +29,11 @@ public class RestExceptionHandler{
 		return new ResponseEntity<Object>(response, HttpStatus.NOT_FOUND);
 	}
 	
+	/**
+	 * Handler method for MethodArgumentNotValidException
+	 * @param MethodArgumentNotValidException ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleInvalidInput(MethodArgumentNotValidException ex) {
         ExceptionResponse response = new ExceptionResponse();
@@ -33,6 +43,11 @@ public class RestExceptionHandler{
         return new ResponseEntity<Object>(response, HttpStatus.BAD_REQUEST);
     }
 
+	/**
+	 * handler method for all other exceptions
+	 * @param exception ex
+	 * @return ResponseEntity<Object>
+	 */
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<Object> handleOtherExceptions(Exception ex) {
 		ExceptionResponse response = new ExceptionResponse();

@@ -1,5 +1,9 @@
 package com.springboot.employee.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import org.junit.Before;
@@ -17,6 +21,10 @@ import com.springboot.employee.model.Employee;
 import com.springboot.employee.service.EmployeeService;
 import com.springboot.employee.service.impl.EmployeeServiceImpl;
 
+/**
+ * Test Class for Employee Service
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringBootEmployeeApplication.class)
 public class EmployeeServiceImplTest {
@@ -39,15 +47,23 @@ public class EmployeeServiceImplTest {
 
 	@Test
 	public void test_findAll_employees() {
+		Employee firstEmp = new Employee("FName1", "LName1", 20, "Address1", 125, "abc@abc.com");
+		employeeService.createEmployee(firstEmp);
+		Employee secEmp = new Employee("FName2", "LName2", 20, "Address2", 125, "abc2@abc.com");
+		employeeService.createEmployee(secEmp);
 		List<Employee> empList = employeeService.getEmployees();
-		org.junit.Assert.assertNotNull(empList);
+		assertNotNull(empList);
+		assertEquals(empList.size(),2);
 	}
 
 	@Test
 	public void test_validId_thenEmployeeShouldBeFound() {
 
+		Employee firstEmp = new Employee("FName1", "LName1", 20, "Address1", 125, "abc@abc.com");
+		employeeService.createEmployee(firstEmp);
 		Employee emp = employeeService.getEmployee(new Long(1));
-		org.junit.Assert.assertNotNull(emp);
+		assertNotNull(emp);
+		assertEquals(emp.getFirstName(),"FName1");
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
@@ -57,8 +73,11 @@ public class EmployeeServiceImplTest {
 	}
 
 	@Test
-	public void test_createEmployee_thenReturnEmployee() {
-
+	public void test_createEmployee_thenEmployeeShouldBeReturned() {
+		Employee firstEmp = new Employee("FName5", "LName1", 20, "Address1", 125, "abc@abc.com");
+		Employee emp = employeeService.createEmployee(firstEmp);
+		assertNotNull(emp);
+		assertEquals(emp.getFirstName(), "FName5");
 	}
 
 	@Test
@@ -67,15 +86,15 @@ public class EmployeeServiceImplTest {
 		Employee firstEmp = new Employee("FName5", "LName1", 20, "Address1", 125, "abc@abc.com");
 
 		employeeService.createEmployee(firstEmp);
-		Employee alex = new Employee("FName6", "LName6", 20, "dept6", 125, "abc@abc.com");
-		Employee emp = employeeService.updateEmployee(firstEmp.getId(), alex);
-		org.junit.Assert.assertEquals(emp.getFirstName(), "FName6");
+		Employee emp = new Employee("FName6", "LName6", 20, "dept6", 125, "abc@abc.com");
+		Employee updEmp = employeeService.updateEmployee(firstEmp.getId(), emp);
+		assertEquals(updEmp.getFirstName(), "FName6");
 	}
 
 	@Test(expected = ResourceNotFoundException.class)
 	public void test_updateInvaliId_thenNotFoundException() {
-		Employee alex = new Employee("FName6", "LName6", 20, "dept6", 125, "abc@abc.com");
-		Employee emp = employeeService.updateEmployee(new Long(100), alex);
+		Employee emp = new Employee("FName6", "LName6", 20, "dept6", 125, "abc@abc.com");
+		Employee newEmp = employeeService.updateEmployee(new Long(100), emp);
 
 	}
 
@@ -83,9 +102,9 @@ public class EmployeeServiceImplTest {
 		Employee emp = employeeService.deleteEmployee(new Long(1));
 		try {
 			employeeService.getEmployee(emp.getId());
-			org.junit.Assert.assertTrue(false);
+			assertTrue(false);
 		} catch (ResourceNotFoundException ex) {
-			org.junit.Assert.assertTrue(true);
+			assertTrue(true);
 		}
 
 	}
